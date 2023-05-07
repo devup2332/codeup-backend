@@ -4,6 +4,7 @@ import { AuthService } from "./auth.service";
 import { LoginUserDto } from "./dto/LoginUserDto";
 import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
+import { RegisterUserDto } from "./dto/RegisterUserDto";
 
 @Controller("/auth")
 export class AuthController {
@@ -16,7 +17,7 @@ export class AuthController {
 	}
 
 	@Post("/register")
-	registerUser(@Body() body: any) {
+	registerUser(@Body() body: RegisterUserDto) {
 		return this._authSrv.registerUser(body);
 	}
 

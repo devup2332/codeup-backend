@@ -9,6 +9,7 @@ import * as jwt from "jsonwebtoken";
 import { environments } from "src/environments/environments";
 import { hashPassword } from "src/utils/bcrypt";
 import { JwtService } from "@nestjs/jwt";
+import { RegisterUserDto } from "./dto/RegisterUserDto";
 
 @Injectable()
 export class AuthService {
@@ -44,8 +45,8 @@ export class AuthService {
 		};
 	}
 
-	async registerUser(data: any) {
-		const { email, firstName, lastName, password, phone, code } = data;
+	async registerUser(data: RegisterUserDto) {
+		const { email, firstName, lastName, password } = data;
 		const hash = await hashPassword(password);
 		const id = uuid();
 		const newUser = this.userRepo.create({
@@ -55,7 +56,6 @@ export class AuthService {
 			firstName,
 			lastName,
 			authType: "form",
-			phone: code + phone,
 		});
 		await this.userRepo.save(newUser);
 		const token = this._jwtSrv.sign({ email });

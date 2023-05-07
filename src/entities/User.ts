@@ -29,9 +29,6 @@ export class User {
 	@Column({ nullable: false })
 		lastName: string;
 
-	@Column({ nullable: true })
-		phone: string;
-
 	@Column({
 		type: "timestamp",
 		default: () => "CURRENT_TIMESTAMP",
