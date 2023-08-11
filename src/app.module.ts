@@ -31,13 +31,12 @@ import { GoogleStrategy } from "./utils/passport/googlestrategy";
 			inject: [ConfigService],
 			useFactory: (confSrv: ConfigService) => {
 				return {
-					type: "mysql",
+					type: "postgres",
 					host: confSrv.get("DB_HOST"),
-					port: 3306,
+					port: confSrv.get("DB_PORT"),
 					username: confSrv.get("DB_USERNAME"),
 					password: confSrv.get("DB_PASSWORD"),
 					database: confSrv.get("DB_NAME"),
-					ssl: {},
 					entities: [User],
 					synchronize: true,
 				};

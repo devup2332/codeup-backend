@@ -14,12 +14,10 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayInit {
 	id: string;
 
 	afterInit(@ConnectedSocket() socket: Socket) {
-		console.log("Websockets is ready");
 		this.socket = socket;
 	}
 
 	handleConnection(client: any) {
-		console.log("New client");
 		this.id = client.client.id;
 	}
 }

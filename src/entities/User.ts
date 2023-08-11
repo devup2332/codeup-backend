@@ -14,7 +14,7 @@ export class User {
 	@Column({ type: "boolean", default: true })
 		isActive: boolean;
 
-	@Column({ nullable: true, type: "longtext" })
+	@Column({ nullable: true, type: "text" })
 		picture: string;
 
 	@Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })

@@ -9,7 +9,7 @@ import * as jwt from "jsonwebtoken";
 import { environments } from "src/environments/environments";
 import { hashPassword } from "src/utils/bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { RegisterUserDto } from "./dto/RegisterUserDto";
+import { RegisterUserDto, RegisterUserSocialDto } from "./dto/RegisterUserDto";
 
 @Injectable()
 export class AuthService {
@@ -28,9 +28,7 @@ export class AuthService {
 		if (!user) {
 			return new HttpException("User not found", HttpStatus.NOT_FOUND);
 		}
-		console.log({ user });
 		const match = await bcrypt.compare(password, user.password);
-		console.log({ match });
 		if (!match) {
 			return new HttpException("Passowrd Incorrect", HttpStatus.UNAUTHORIZED);
 		}
@@ -68,7 +66,7 @@ export class AuthService {
 		picture,
 		firstName,
 		lastName,
-	}: any) {
+	}: RegisterUserSocialDto) {
 		const user = await this.userRepo.findOne({ where: { email } });
 		if (user) {
 			const token = this._jwtSrv.sign({ email });
@@ -89,9 +87,7 @@ export class AuthService {
 	}
 
 	async validateEmail(email: string) {
-		console.log({ email });
 		const user = await this.userRepo.findOne({ where: { email } });
-		console.log({ user });
 		if (user) {
 			return { status: 0 };
 		}

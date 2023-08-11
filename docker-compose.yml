@@ -1,0 +1,14 @@
+# Use postgres/example user/password credentials
+version: '3.8'
+
+services:
+
+  db:
+    image: postgres
+    container_name: db-dev
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 123123123 
+      POSTGRES_DB: codeup-dev

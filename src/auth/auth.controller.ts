@@ -4,13 +4,11 @@ import { AuthService } from "./auth.service";
 import { LoginUserDto } from "./dto/LoginUserDto";
 import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
-import { RegisterUserDto } from "./dto/RegisterUserDto";
+import { RegisterUserDto, RegisterUserSocialDto } from "./dto/RegisterUserDto";
 
 @Controller("/auth")
 export class AuthController {
-	constructor(
-		private _authSrv: AuthService,
-	) {}
+	constructor(private _authSrv: AuthService) {}
 	@Post("/login")
 	loginUser(@Body() body: LoginUserDto) {
 		return this._authSrv.loginUser(body);
@@ -23,7 +21,6 @@ export class AuthController {
 
 	@Get("/validateEmail/:email")
 	validateEmail(@Param("email") email: string) {
-		console.log(email);
 		return this._authSrv.validateEmail(email);
 	}
 
@@ -37,7 +34,7 @@ export class AuthController {
 	@UseGuards(AuthGuard("google"))
 	async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
 		const { email, picture, lastName, firstName } = req.user as any;
-		const newUser = {
+		const newUser: RegisterUserSocialDto = {
 			email,
 			picture,
 			lastName,
@@ -46,7 +43,6 @@ export class AuthController {
 		};
 		const { token } = await this._authSrv.registerUserBySocial(newUser);
 		const rtoken = token.replace(".", "-").replace(".", "-");
-		console.log({ rtoken, token });
 		return res.redirect(`http://localhost:3000/sso/auth/${rtoken}`);
 	}
 }
