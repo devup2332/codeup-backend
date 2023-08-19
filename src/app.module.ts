@@ -8,9 +8,17 @@ import { environments } from "./environments/environments";
 import { User } from "./entities/User";
 import { JwtModule } from "@nestjs/jwt/dist";
 import { GoogleStrategy } from "./utils/passport/googlestrategy";
+import { UserModule } from "./user/user.module";
+import { GraphQLModule } from "@nestjs/graphql";
+import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { join } from "path";
 
 @Module({
 	imports: [
+		GraphQLModule.forRoot<ApolloDriverConfig>({
+			driver: ApolloDriver,
+			autoSchemaFile: join(process.cwd(), "src/schema.gql"),
+		}),
 		AuthModule,
 		ConfigModule.forRoot({
 			load: [environments],
@@ -42,6 +50,7 @@ import { GoogleStrategy } from "./utils/passport/googlestrategy";
 				};
 			},
 		}),
+		UserModule,
 	],
 	controllers: [AppController],
 	providers: [AppService, GoogleStrategy],

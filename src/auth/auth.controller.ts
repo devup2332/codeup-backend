@@ -24,6 +24,12 @@ export class AuthController {
 		return this._authSrv.validateEmail(email);
 	}
 
+	@Post("/validateToken")
+	validateToken(@Body() body: { token: string }) {
+		const { token } = body;
+		return this._authSrv.validateToken(token);
+	}
+
 	@Get("google/login")
 	@UseGuards(AuthGuard("google"))
 	async googleAuth() {
@@ -42,7 +48,6 @@ export class AuthController {
 			authType: "social",
 		};
 		const { token } = await this._authSrv.registerUserBySocial(newUser);
-		const rtoken = token.replace(".", "-").replace(".", "-");
-		return res.redirect(`http://localhost:3000/sso/auth/${rtoken}`);
+		return res.redirect(`http://localhost:3000/?token=${token}`);
 	}
 }

@@ -1,38 +1,51 @@
 import { Column, PrimaryColumn, Entity } from "typeorm";
+import { Field, ObjectType } from "@nestjs/graphql";
 
+/* eslint-disable */
+@ObjectType()
 @Entity("Users")
 export class User {
+	@Field(() => String)
 	@PrimaryColumn({ unique: true })
-		id: string;
+	id: string;
 
+	@Field()
 	@Column({ unique: true })
-		email: string;
+	email: string;
 
+	@Field()
 	@Column({ nullable: true })
-		password: string;
+	password: string;
 
+	@Field()
 	@Column({ type: "boolean", default: true })
-		isActive: boolean;
+	isActive: boolean;
 
+	@Field({ nullable: true })
 	@Column({ nullable: true, type: "text" })
-		picture: string;
+	picture?: string;
 
+	@Field()
 	@Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-		createdAt: Date;
+	createdAt: Date;
 
+	@Field()
 	@Column({ type: "varchar" })
-		authType: string;
+	authType: string;
 
+	@Field()
 	@Column({ nullable: false })
-		firstName: string;
+	firstName: string;
 
+	@Field()
 	@Column({ nullable: false })
-		lastName: string;
+	lastName: string;
 
+	@Field()
 	@Column({
 		type: "timestamp",
 		default: () => "CURRENT_TIMESTAMP",
 		onUpdate: "CURRENT_TIMESTAMP",
 	})
-		updatedAt: Date;
+	updatedAt: Date;
 }

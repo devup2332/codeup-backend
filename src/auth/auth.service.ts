@@ -33,9 +33,13 @@ export class AuthService {
 			return new HttpException("Passowrd Incorrect", HttpStatus.UNAUTHORIZED);
 		}
 
-		const token = jwt.sign({ email }, environments().JWT_SECRET, {
-			expiresIn: 86400,
-		});
+		const token = jwt.sign(
+			{ email, userId: user.id },
+			environments().JWT_SECRET,
+			{
+				expiresIn: 86400,
+			}
+		);
 		return {
 			status: 1,
 			message: "User logged successfully",
@@ -69,7 +73,7 @@ export class AuthService {
 	}: RegisterUserSocialDto) {
 		const user = await this.userRepo.findOne({ where: { email } });
 		if (user) {
-			const token = this._jwtSrv.sign({ email });
+			const token = this._jwtSrv.sign({ email, userId: user.id });
 			return { token, user };
 		}
 		const id = uuid();
@@ -82,7 +86,7 @@ export class AuthService {
 			firstName,
 		});
 		await this.userRepo.save(newUser);
-		const token = this._jwtSrv.sign({ email });
+		const token = this._jwtSrv.sign({ email, userId: id });
 		return { token, newUser };
 	}
 
@@ -92,5 +96,10 @@ export class AuthService {
 			return { status: 0 };
 		}
 		return { status: 1 };
+	}
+
+	async validateToken(token: string) {
+		const user = this._jwtSrv.decode(token);
+		return { status: user?.["email"] ? 1 : 0, userId: user?.["userId"] || "" };
 	}
 }
