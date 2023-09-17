@@ -48,6 +48,9 @@ export class AuthController {
 			authType: "social",
 		};
 		const { token } = await this._authSrv.authSocialUser(newUser);
-		return res.redirect(`http://localhost:3000/sso/auth?token=${token}`);
+		console.log({ env: process.env });
+		return res.redirect(
+			`${process.env.CLIENT_URL}/sso/auth?token=${token}`
+		);
 	}
 }
