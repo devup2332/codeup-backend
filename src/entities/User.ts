@@ -3,7 +3,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 
 /* eslint-disable */
 @ObjectType()
-@Entity("Users")
+@Entity("users_tb")
 export class User {
 	@Field(() => String)
 	@PrimaryColumn({ unique: true })

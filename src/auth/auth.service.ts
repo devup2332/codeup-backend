@@ -30,7 +30,10 @@ export class AuthService {
 		}
 		const match = await bcrypt.compare(password, user.password);
 		if (!match) {
-			return new HttpException("Passowrd Incorrect", HttpStatus.UNAUTHORIZED);
+			return new HttpException(
+				"Passowrd Incorrect",
+				HttpStatus.UNAUTHORIZED
+			);
 		}
 
 		const token = jwt.sign(
@@ -64,7 +67,7 @@ export class AuthService {
 		return { status: 200, token, message: "User created successfully" };
 	}
 
-	async registerUserBySocial({
+	async authSocialUser({
 		email,
 		authType,
 		picture,
@@ -99,7 +102,14 @@ export class AuthService {
 	}
 
 	async validateToken(token: string) {
-		const user = this._jwtSrv.decode(token);
-		return { status: user?.["email"] ? 1 : 0, userId: user?.["userId"] || "" };
+		try {
+			const user = this._jwtSrv.decode(token);
+			return {
+				status: user["email"] ? 1 : 0,
+				userId: user["userId"],
+			};
+		} catch {
+			return { status: 0, userId: null };
+		}
 	}
 }

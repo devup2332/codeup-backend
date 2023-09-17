@@ -30,9 +30,9 @@ export class AuthController {
 		return this._authSrv.validateToken(token);
 	}
 
-	@Get("google/login")
+	@Get("/google")
 	@UseGuards(AuthGuard("google"))
-	async googleAuth() {
+	async googleAuthLogin() {
 		return HttpStatus.OK;
 	}
 
@@ -47,7 +47,7 @@ export class AuthController {
 			firstName,
 			authType: "social",
 		};
-		const { token } = await this._authSrv.registerUserBySocial(newUser);
-		return res.redirect(`http://localhost:3000/?token=${token}`);
+		const { token } = await this._authSrv.authSocialUser(newUser);
+		return res.redirect(`http://localhost:3000/sso/auth?token=${token}`);
 	}
 }
