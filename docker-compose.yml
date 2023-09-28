@@ -3,7 +3,7 @@ services:
   server:
     build:
       context: ./
-      dockerfile: Dockerfile-dev 
+      dockerfile: dockerfile.dev 
     command: npx nest start --watch 
     container_name: server
     ports:
