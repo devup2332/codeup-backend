@@ -11,5 +11,5 @@ export class RegisterUserSocialDto {
 	firstName: string;
 	lastName: string;
 	picture?: string;
-	authType?: "form" | "social";
+	authType?: "form" | "google" | "github";
 }

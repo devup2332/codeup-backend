@@ -41,11 +41,11 @@ export class AuthController {
 	async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
 		const { email, picture, lastName, firstName } = req.user as any;
 		const newUser: RegisterUserSocialDto = {
-			email,
-			picture,
-			lastName,
-			firstName,
-			authType: "social",
+			email: email || "",
+			picture: picture || "",
+			lastName: lastName || "",
+			firstName: firstName || "",
+			authType: "google",
 		};
 		const { token } = await this._authSrv.authSocialUser(newUser);
 		return res.redirect(
