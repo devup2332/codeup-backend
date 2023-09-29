@@ -1,4 +1,4 @@
-import { Query, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { User } from "src/entities/User";
 import { UserService } from "./user.service";
 
@@ -8,5 +8,11 @@ export class UserResolver {
 	@Query(() => [User])
 	async users() {
 		return await this._userSrv.getUsers();
+	}
+
+	@Mutation(() => [User])
+	async deleteUserById(@Args("userId") userId: string) {
+		const response = await this._userSrv.getUserById(userId);
+		return response || [];
 	}
 }

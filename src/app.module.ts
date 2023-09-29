@@ -7,11 +7,12 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { environments } from "./environments/environments";
 import { User } from "./entities/User";
 import { JwtModule } from "@nestjs/jwt/dist";
-import { GoogleStrategy } from "./utils/passport/googlestrategy";
 import { UserModule } from "./user/user.module";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
+import { GoogleStrategy } from "./utils/passport/google.strategy";
+import { GithubStrategy } from "./utils/passport/github.strategy";
 
 @Module({
 	imports: [
@@ -53,6 +54,6 @@ import { join } from "path";
 		UserModule,
 	],
 	controllers: [AppController],
-	providers: [AppService, GoogleStrategy],
+	providers: [AppService, GoogleStrategy, GithubStrategy],
 })
 export class AppModule {}

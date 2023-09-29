@@ -1,4 +1,11 @@
-import { Controller, Get, HttpStatus, Param, Res } from "@nestjs/common";
+import {
+	Controller,
+	Get,
+	HttpException,
+	HttpStatus,
+	Param,
+	Res,
+} from "@nestjs/common";
 import { Body, Post, Req, UseGuards } from "@nestjs/common/decorators";
 import { AuthService } from "./auth.service";
 import { LoginUserDto } from "./dto/LoginUserDto";
@@ -36,20 +43,53 @@ export class AuthController {
 		return HttpStatus.OK;
 	}
 
+	@Get("github")
+	@UseGuards(AuthGuard("github"))
+	async githubAuthLogin() {
+		return HttpStatus.OK;
+	}
+
+	@Get("github/redirect")
+	@UseGuards(AuthGuard("github"))
+	async githubAuthRedirect(@Req() req: Request, @Res() res: Response) {
+		try {
+			const { email, picture, firstName } = req.user as any;
+			const newUser: RegisterUserSocialDto = {
+				email: email,
+				picture: picture,
+				firstName: firstName,
+				authType: "github",
+			};
+			const { token } = await this._authSrv.authSocialGithubUser(newUser);
+			return res.redirect(
+				`${process.env.CLIENT_URL}/sso/auth?token=${token}`
+			);
+		} catch (err) {
+			throw new HttpException(
+				"Logged with a different service",
+				HttpStatus.UNAUTHORIZED
+			);
+		}
+	}
 	@Get("google/redirect")
 	@UseGuards(AuthGuard("google"))
 	async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-		const { email, picture, lastName, firstName } = req.user as any;
-		const newUser: RegisterUserSocialDto = {
-			email: email || "",
-			picture: picture || "",
-			lastName: lastName || "",
-			firstName: firstName || "",
-			authType: "google",
-		};
-		const { token } = await this._authSrv.authSocialUser(newUser);
-		return res.redirect(
-			`${process.env.CLIENT_URL}/sso/auth?token=${token}`
-		);
+		try {
+			const { email, picture, lastName, firstName } = req.user as any;
+			const newUser: RegisterUserSocialDto = {
+				email: email || "",
+				picture: picture || "",
+				lastName: lastName || "",
+				firstName: firstName || "",
+				authType: "google",
+			};
+			const { token } = await this._authSrv.authSocialGoogleUser(newUser);
+			const urlRedirect = `${process.env.CLIENT_URL}/sso/auth?token=${token}`;
+
+			return res.redirect(urlRedirect);
+		} catch (err) {
+			const urlRedirect = `${process.env.CLIENT_URL}/login?code=5561`;
+			return res.redirect(urlRedirect);
+		}
 	}
 }

@@ -5,13 +5,13 @@
 type User {
   id: String!
   email: String!
-  password: String!
+  password: String
   isActive: Boolean!
   picture: String
   createdAt: DateTime!
   authType: String!
-  firstName: String!
-  lastName: String!
+  firstName: String
+  lastName: String
   updatedAt: DateTime!
 }
 
@@ -22,4 +22,8 @@ scalar DateTime
 
 type Query {
   users: [User!]!
+}
+
+type Mutation {
+  deleteUserById(userId: String!): [User!]!
 }

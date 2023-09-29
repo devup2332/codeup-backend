@@ -67,14 +67,43 @@ export class AuthService {
 		return { status: 200, token, message: "User created successfully" };
 	}
 
-	async authSocialUser({
+	async authSocialGithubUser({
+		authType,
+		picture,
+		firstName,
+		lastName,
+		email,
+	}: RegisterUserSocialDto) {
+		const user = await this.userRepo.findOne({
+			where: { email, authType: "github" },
+		});
+		if (user && user.authType === "github") {
+			const token = this._jwtSrv.sign({ email, userId: user.id });
+			return { token, user };
+		}
+		const id = uuid();
+		const newUser = this.userRepo.create({
+			id,
+			authType,
+			picture,
+			lastName,
+			firstName,
+			email,
+		});
+		await this.userRepo.save(newUser);
+		const token = this._jwtSrv.sign({ email, userId: id });
+		return { token, newUser };
+	}
+	async authSocialGoogleUser({
 		email,
 		authType,
 		picture,
 		firstName,
 		lastName,
 	}: RegisterUserSocialDto) {
-		const user = await this.userRepo.findOne({ where: { email } });
+		const user = await this.userRepo.findOne({
+			where: { email, authType: "google" },
+		});
 		if (user) {
 			const token = this._jwtSrv.sign({ email, userId: user.id });
 			return { token, user };
@@ -105,7 +134,7 @@ export class AuthService {
 		try {
 			const user = this._jwtSrv.decode(token);
 			return {
-				status: user["email"] ? 1 : 0,
+				status: user["email"] || user["username"] ? 1 : 0,
 				userId: user["userId"],
 			};
 		} catch {

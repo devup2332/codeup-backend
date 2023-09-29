@@ -13,9 +13,9 @@ export class User {
 	@Column({ unique: true })
 	email: string;
 
-	@Field()
+	@Field({ nullable: true })
 	@Column({ nullable: true })
-	password: string;
+	password?: string;
 
 	@Field()
 	@Column({ type: "boolean", default: true })
@@ -33,13 +33,13 @@ export class User {
 	@Column({ type: "varchar" })
 	authType: string;
 
-	@Field()
+	@Field({ nullable: true })
 	@Column({ nullable: false })
-	firstName: string;
+	firstName?: string;
 
-	@Field()
-	@Column({ nullable: false })
-	lastName: string;
+	@Field({ nullable: true })
+	@Column({ nullable: true })
+	lastName?: string;
 
 	@Field()
 	@Column({

@@ -7,7 +7,7 @@ import { Repository } from "typeorm";
 export class UserService {
 	constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 	async getUserById(userId: string) {
-		return await this.userRepo.findOne({ where: { id: userId } });
+		return (await this.userRepo.findOne({ where: { id: userId } })) || [];
 	}
 
 	async getUsers() {
