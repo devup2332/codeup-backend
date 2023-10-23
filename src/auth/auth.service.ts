@@ -5,8 +5,8 @@ import { User } from "src/entities/User";
 import { Repository } from "typeorm";
 import { LoginUserDto } from "./dto/LoginUserDto";
 import * as bcrypt from "bcrypt";
-import * as jwt from "jsonwebtoken";
-import { environments } from "src/environments/environments";
+
+import { DEFAULT_PHOTO_PROFILE } from "src/environments/environments";
 import { hashPassword } from "src/utils/bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { RegisterUserDto, RegisterUserSocialDto } from "./dto/RegisterUserDto";
@@ -36,17 +36,12 @@ export class AuthService {
 			);
 		}
 
-		const token = jwt.sign(
-			{ email, userId: user.id },
-			environments().JWT_SECRET,
-			{
-				expiresIn: 86400,
-			}
-		);
+		const token = this._jwtSrv.sign({ email, userId: user.id });
 		return {
 			status: 1,
 			message: "User logged successfully",
 			token,
+			userId: user.id,
 		};
 	}
 
@@ -59,12 +54,18 @@ export class AuthService {
 			email,
 			password: hash,
 			firstName,
+			picture: DEFAULT_PHOTO_PROFILE,
 			lastName,
 			authType: "form",
 		});
 		await this.userRepo.save(newUser);
-		const token = this._jwtSrv.sign({ email });
-		return { status: 200, token, message: "User created successfully" };
+		const token = this._jwtSrv.sign({ email, userId: id });
+		return {
+			status: 200,
+			token,
+			message: "User created successfully",
+			userId: id,
+		};
 	}
 
 	async authSocialGithubUser({
@@ -130,12 +131,22 @@ export class AuthService {
 		return { status: 1 };
 	}
 
+	async refreshToken(token: string) {
+		const { email, userId } = this._jwtSrv.decode(token) as any;
+		const newToken = this._jwtSrv.sign({ email, userId });
+		return { status: 1, newToken };
+	}
+
 	async validateToken(token: string) {
 		try {
-			const user = this._jwtSrv.decode(token);
+			const { email, userId, exp } = this._jwtSrv.decode(token) as any;
+
+			const expired = Date.now() >= exp * 1000;
+
 			return {
-				status: user["email"] || user["username"] ? 1 : 0,
-				userId: user["userId"],
+				status: email ? 1 : 0,
+				expired,
+				userId: userId,
 			};
 		} catch {
 			return { status: 0, userId: null };

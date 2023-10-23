@@ -1,14 +1,19 @@
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, VerifyCallback } from "passport-google-oauth20";
 import { Injectable } from "@nestjs/common";
+import {
+	GOOGLE_CLIENT_ID,
+	GOOGLE_CLIENT_SECRET,
+	SERVER_HOST,
+} from "src/environments/environments";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
 	constructor() {
 		super({
-			clientID: process.env.GOOGLE_CLIENT_ID,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: `${process.env.HOST}/auth/google/redirect`,
+			clientID: GOOGLE_CLIENT_ID,
+			clientSecret: GOOGLE_CLIENT_SECRET,
+			callbackURL: `${SERVER_HOST}/auth/google/redirect`,
 			scope: ["email", "profile"],
 		});
 	}

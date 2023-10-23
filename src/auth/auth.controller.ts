@@ -1,17 +1,11 @@
-import {
-	Controller,
-	Get,
-	HttpException,
-	HttpStatus,
-	Param,
-	Res,
-} from "@nestjs/common";
+import { Controller, Get, HttpStatus, Param, Res } from "@nestjs/common";
 import { Body, Post, Req, UseGuards } from "@nestjs/common/decorators";
 import { AuthService } from "./auth.service";
 import { LoginUserDto } from "./dto/LoginUserDto";
 import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
 import { RegisterUserDto, RegisterUserSocialDto } from "./dto/RegisterUserDto";
+import { CLIENT_URL } from "src/environments/environments";
 
 @Controller("/auth")
 export class AuthController {
@@ -35,6 +29,12 @@ export class AuthController {
 	validateToken(@Body() body: { token: string }) {
 		const { token } = body;
 		return this._authSrv.validateToken(token);
+	}
+
+	@Post("/refreshToken")
+	refreshToken(@Body() body: { token: string }) {
+		const { token } = body;
+		return this._authSrv.refreshToken(token);
 	}
 
 	@Get("/google")
@@ -61,14 +61,10 @@ export class AuthController {
 				authType: "github",
 			};
 			const { token } = await this._authSrv.authSocialGithubUser(newUser);
-			return res.redirect(
-				`${process.env.CLIENT_URL}/sso/auth?token=${token}`
-			);
+			return res.redirect(`${CLIENT_URL}/sso/auth?token=${token}`);
 		} catch (err) {
-			throw new HttpException(
-				"Logged with a different service",
-				HttpStatus.UNAUTHORIZED
-			);
+			const urlRedirect = `${CLIENT_URL}/login?code=5561`;
+			return res.redirect(urlRedirect);
 		}
 	}
 	@Get("google/redirect")
@@ -84,11 +80,11 @@ export class AuthController {
 				authType: "google",
 			};
 			const { token } = await this._authSrv.authSocialGoogleUser(newUser);
-			const urlRedirect = `${process.env.CLIENT_URL}/sso/auth?token=${token}`;
+			const urlRedirect = `${CLIENT_URL}/sso/auth?token=${token}`;
 
 			return res.redirect(urlRedirect);
 		} catch (err) {
-			const urlRedirect = `${process.env.CLIENT_URL}/login?code=5561`;
+			const urlRedirect = `${CLIENT_URL}/login?code=5561`;
 			return res.redirect(urlRedirect);
 		}
 	}

@@ -4,7 +4,6 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { environments } from "./environments/environments";
 import { User } from "./entities/User";
 import { JwtModule } from "@nestjs/jwt/dist";
 import { UserModule } from "./user/user.module";
@@ -13,6 +12,14 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import { GoogleStrategy } from "./utils/passport/google.strategy";
 import { GithubStrategy } from "./utils/passport/github.strategy";
+import {
+	DB_HOST,
+	DB_NAME,
+	DB_PASSWORD,
+	DB_PORT,
+	DB_USERNAME,
+	JWT_SECRET,
+} from "./environments/environments";
 
 @Module({
 	imports: [
@@ -21,33 +28,29 @@ import { GithubStrategy } from "./utils/passport/github.strategy";
 			autoSchemaFile: join(process.cwd(), "src/schema.gql"),
 		}),
 		AuthModule,
-		ConfigModule.forRoot({
-			load: [environments],
-		}),
 		JwtModule.registerAsync({
 			global: true,
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: (confSrv: ConfigService) => {
+			useFactory: () => {
 				return {
-					secret: confSrv.get("JWT_SECRET"),
-					signOptions: { expiresIn: 86400 },
+					secret: JWT_SECRET,
+					signOptions: { expiresIn: 10 },
 				};
 			},
 		}),
 		TypeOrmModule.forRootAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: (confSrv: ConfigService) => {
+			useFactory: () => {
 				return {
 					type: "postgres",
-					host: confSrv.get("DB_HOST"),
-					port: confSrv.get("DB_PORT"),
-					username: confSrv.get("DB_USERNAME"),
-					password: confSrv.get("DB_PASSWORD"),
-					database: confSrv.get("DB_NAME"),
+					host: DB_HOST,
+					port: Number(DB_PORT),
+					username: DB_USERNAME,
+					password: DB_PASSWORD,
+					database: DB_NAME,
 					entities: [User],
-					synchronize: true,
 				};
 			},
 		}),

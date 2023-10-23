@@ -4,15 +4,16 @@ services:
     build:
       context: ./
       dockerfile: dockerfile.dev 
-    command: npx nest start --watch 
+    command: npm run start:dev 
+    env_file: .env
     container_name: server
     ports:
       - 8000:8000
-    working_dir: /usr/src/app
     depends_on:
       - db
     volumes:
-      - ./:/usr/src/app
+      - ./:/home/node/app
+      - ./node_modules:/home/node/app/node_modules
     networks:
       - codeup
 
