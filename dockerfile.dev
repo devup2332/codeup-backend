@@ -1,7 +1,6 @@
 FROM node:16
 
 # Create app directory
-ENV NODE_ENV = "development"
 WORKDIR /home/node/app
 
 # Install app dependencies
