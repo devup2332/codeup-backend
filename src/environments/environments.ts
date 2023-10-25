@@ -12,6 +12,8 @@ const {
 	DB_USERNAME_PROD,
 	DB_PASSWORD_PROD,
 	DB_NAME_PROD,
+	SERVER_HOST_DEV,
+	SERVER_HOST_PROD,
 } = process.env;
 
 const DEV_MODE = NODE_ENV === "development";
@@ -26,6 +28,10 @@ export const DB_HOST = DEV_MODE ? DB_HOST_DEV : DB_HOST_PROD;
 // Client Info
 export const CLIENT_URL = DEV_MODE ? CLIENT_URL_DEV : CLIENT_URL_PROD;
 
+// Server Info
+export const SERVER_HOST = DEV_MODE ? SERVER_HOST_DEV : SERVER_HOST_PROD;
+export const { SERVER_PORT } = process.env;
+
 // Social Authentication Variables
 export const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
 export const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
@@ -35,7 +41,3 @@ export const { JWT_SECRET } = process.env;
 
 // Default Values
 export const { DEFAULT_PHOTO_PROFILE } = process.env;
-
-// Server Info
-export const { SERVER_HOST, SERVER_PORT } = process.env;
-
