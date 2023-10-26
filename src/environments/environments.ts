@@ -13,7 +13,7 @@ const {
 	DB_NAME_PROD,
 	SERVER_HOST_DEV,
 	SERVER_HOST_PROD,
-	ENVIRONMENT,
+	NODE_ENV,
 	GITHUB_CLIENT_SECRET,
 	GITHUB_CLIENT_ID,
 	GOOGLE_CLIENT_SECRET,
@@ -23,7 +23,7 @@ const {
 	DEFAULT_PHOTO_PROFILE,
 } = process.env;
 
-const DEV_MODE = ENVIRONMENT === "development";
+const DEV_MODE = NODE_ENV === "development";
 
 
 const database = {
