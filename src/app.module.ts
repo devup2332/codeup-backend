@@ -28,7 +28,7 @@ import environments from "./environments/environments";
 			useFactory: () => {
 				return {
 					secret: environments.others.JWT_SECRET,
-					signOptions: { expiresIn: 10 },
+					signOptions: { expiresIn: 86400 },
 				};
 			},
 		}),
