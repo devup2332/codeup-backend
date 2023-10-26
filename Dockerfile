@@ -21,10 +21,5 @@ RUN yarn install
 # Copy built application
 COPY . .
 
-# Build application
-RUN yarn build 
-
-RUN yarn start
-
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 8000 
