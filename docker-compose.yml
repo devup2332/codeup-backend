@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./:/home/node/app
+      - ./:/usr/src/app
     networks:
       - codeup
 
