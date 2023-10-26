@@ -44,6 +44,7 @@ import environments from "./environments/environments";
 					password: environments.database.DB_PASSWORD,
 					database: environments.database.DB_NAME,
 					entities: [User],
+					synchronize: true,
 				};
 			},
 		}),
