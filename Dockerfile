@@ -29,7 +29,7 @@ RUN npm ci --include=dev
 COPY --link . .
 
 # Build application
-RUN npm run build
+RUN yarn build 
 
 # Final stage for app image
 FROM base
@@ -38,5 +38,4 @@ FROM base
 COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD [ "npm", "run", "start:migrate:prod" ]
+EXPOSE 8000 
