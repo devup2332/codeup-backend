@@ -41,3 +41,4 @@ export const { JWT_SECRET } = process.env;
 
 // Default Values
 export const { DEFAULT_PHOTO_PROFILE } = process.env;
+console.log({ env: process.env });
