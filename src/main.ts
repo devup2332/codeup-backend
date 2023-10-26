@@ -11,7 +11,7 @@ async function bootstrap() {
 	});
 	await app.listen(environments.others.PORT || 8000, "0.0.0.0", () =>
 		console.log(
-			`SERVER LISTENING ON PORT ${environments.others.PORT} IN ${process.env.NODE_ENV} MODE`
+			`SERVER LISTENING ON PORT ${environments.others.PORT} IN ${process.env.NODE_ENV.toUpperCase()} MODE`
 		)
 	);
 }

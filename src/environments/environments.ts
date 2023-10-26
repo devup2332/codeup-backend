@@ -24,7 +24,6 @@ const {
 } = process.env;
 
 const DEV_MODE = NODE_ENV === "development";
-console.log({ NODE_ENV });
 
 const database = {
 	DB_PORT: DEV_MODE ? DB_PORT_DEV : DB_PORT_PROD,
