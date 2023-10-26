@@ -49,6 +49,4 @@ const others = {
 	DEFAULT_PHOTO_PROFILE,
 };
 
-console.log({ database, passport, others });
-
 export default { database, passport, others };

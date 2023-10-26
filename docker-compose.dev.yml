@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev 
     command: yarn start:dev 
+    env_file: .env
     container_name: server
     ports:
       - 8000:8000
