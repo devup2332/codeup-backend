@@ -4,9 +4,6 @@ FROM node
 # NestJS app lives here
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV=development
-
 # Install node modules
 COPY package.json .
 
