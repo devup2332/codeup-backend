@@ -25,6 +25,7 @@ const {
 
 const DEV_MODE = ENVIRONMENT === "development";
 
+
 const database = {
 	DB_PORT: DEV_MODE ? DB_PORT_DEV : DB_PORT_PROD,
 	DB_USERNAME: DEV_MODE ? DB_USERNAME_DEV : DB_USERNAME_PROD,

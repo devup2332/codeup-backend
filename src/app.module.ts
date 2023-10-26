@@ -10,8 +10,8 @@ import { AppService } from "./app.service";
 // import { GraphQLModule } from "@nestjs/graphql";
 // import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 // import { join } from "path";
-import { GoogleStrategy } from "./utils/passport/google.strategy";
-import { GithubStrategy } from "./utils/passport/github.strategy";
+// import { GoogleStrategy } from "./utils/passport/google.strategy";
+// import { GithubStrategy } from "./utils/passport/github.strategy";
 // import environments from "./environments/environments";
 
 @Module({
@@ -51,6 +51,6 @@ import { GithubStrategy } from "./utils/passport/github.strategy";
 		// UserModule,
 	],
 	controllers: [AppController],
-	providers: [AppService, GoogleStrategy, GithubStrategy],
+	providers: [AppService],
 })
 export class AppModule {}
