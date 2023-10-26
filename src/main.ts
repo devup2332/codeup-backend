@@ -9,7 +9,7 @@ async function bootstrap() {
 			origin: "https://codeup-alpha.vercel.app",
 		},
 	});
-	await app.listen( 8000);
+	await app.listen(8000, "0.0.0.0");
 }
 console.log({ environments });
 bootstrap();
