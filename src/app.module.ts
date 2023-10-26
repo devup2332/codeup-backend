@@ -12,14 +12,7 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import { GoogleStrategy } from "./utils/passport/google.strategy";
 import { GithubStrategy } from "./utils/passport/github.strategy";
-import {
-	DB_HOST,
-	DB_NAME,
-	DB_PASSWORD,
-	DB_PORT,
-	DB_USERNAME,
-	JWT_SECRET,
-} from "./environments/environments";
+import environments from "./environments/environments";
 
 @Module({
 	imports: [
@@ -34,7 +27,7 @@ import {
 			inject: [ConfigService],
 			useFactory: () => {
 				return {
-					secret: JWT_SECRET,
+					secret: environments.others.JWT_SECRET,
 					signOptions: { expiresIn: 10 },
 				};
 			},
@@ -45,11 +38,11 @@ import {
 			useFactory: () => {
 				return {
 					type: "postgres",
-					host: DB_HOST,
-					port: Number(DB_PORT),
-					username: DB_USERNAME,
-					password: DB_PASSWORD,
-					database: DB_NAME,
+					host: environments.database.DB_HOST,
+					port: Number(environments.database.DB_PORT),
+					username: environments.database.DB_USERNAME,
+					password: environments.database.DB_PASSWORD,
+					database: environments.database.DB_NAME,
 					entities: [User],
 				};
 			},

@@ -6,10 +6,10 @@ import { Repository } from "typeorm";
 import { LoginUserDto } from "./dto/LoginUserDto";
 import * as bcrypt from "bcrypt";
 
-import { DEFAULT_PHOTO_PROFILE } from "src/environments/environments";
 import { hashPassword } from "src/utils/bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { RegisterUserDto, RegisterUserSocialDto } from "./dto/RegisterUserDto";
+import environments from "src/environments/environments";
 
 @Injectable()
 export class AuthService {
@@ -54,7 +54,7 @@ export class AuthService {
 			email,
 			password: hash,
 			firstName,
-			picture: DEFAULT_PHOTO_PROFILE,
+			picture: environments.others.DEFAULT_PHOTO_PROFILE,
 			lastName,
 			authType: "form",
 		});

@@ -5,7 +5,7 @@ import { LoginUserDto } from "./dto/LoginUserDto";
 import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
 import { RegisterUserDto, RegisterUserSocialDto } from "./dto/RegisterUserDto";
-import { CLIENT_URL } from "src/environments/environments";
+import environments from "src/environments/environments";
 
 @Controller("/auth")
 export class AuthController {
@@ -61,9 +61,11 @@ export class AuthController {
 				authType: "github",
 			};
 			const { token } = await this._authSrv.authSocialGithubUser(newUser);
-			return res.redirect(`${CLIENT_URL}/sso/auth?token=${token}`);
+			return res.redirect(
+				`${environments.others.CLIENT_URL}/sso/auth?token=${token}`
+			);
 		} catch (err) {
-			const urlRedirect = `${CLIENT_URL}/login?code=5561`;
+			const urlRedirect = `${environments.others.CLIENT_URL}/login?code=5561`;
 			return res.redirect(urlRedirect);
 		}
 	}
@@ -80,11 +82,11 @@ export class AuthController {
 				authType: "google",
 			};
 			const { token } = await this._authSrv.authSocialGoogleUser(newUser);
-			const urlRedirect = `${CLIENT_URL}/sso/auth?token=${token}`;
+			const urlRedirect = `${environments.others.CLIENT_URL}/sso/auth?token=${token}`;
 
 			return res.redirect(urlRedirect);
 		} catch (err) {
-			const urlRedirect = `${CLIENT_URL}/login?code=5561`;
+			const urlRedirect = `${environments.others.CLIENT_URL}/login?code=5561`;
 			return res.redirect(urlRedirect);
 		}
 	}
