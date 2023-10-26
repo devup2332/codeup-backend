@@ -11,4 +11,5 @@ async function bootstrap() {
 	});
 	await app.listen(environments.others.SERVER_PORT || 8000);
 }
+console.log({ environments });
 bootstrap();
